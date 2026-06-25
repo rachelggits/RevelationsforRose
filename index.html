@@ -17,7 +17,6 @@
     --muted: #282828;
     --line: #f0a8bd;
     --card-bg: #FAE7E4;
-    /* fluid crystal-ball size: scales with viewport, fits both axes */
     --ball: clamp(220px, min(70vw, 60vh), 560px);
   }
 
@@ -80,18 +79,15 @@
     vertical-align: middle;
   }
 
-  /* The crystal ball */
   .orb-wrap {
     position: relative;
     width: var(--ball);
     height: var(--ball);
     margin: 0 auto 2.75rem;
-    /* hand cursor at rest, hovering near the ball */
     cursor: grab;
   }
   .orb-wrap:active { cursor: grabbing; }
 
-  /* the glass sphere */
   .orb {
     position: absolute;
     top: 0; left: 50%;
@@ -120,7 +116,6 @@
     z-index: 2;
   }
 
-  /* highlight glint on the glass */
   .orb::before {
     content: "";
     position: absolute;
@@ -134,7 +129,6 @@
 
   .orb-wrap:hover .orb { transform: translateX(-50%) translateY(-3px); }
 
-  /* the swirling mist inside */
   .mist {
     position: absolute;
     width: 150%; height: 150%;
@@ -167,7 +161,6 @@
     text-align: center;
   }
 
-  /* gentle nudge on the whole ball as it reads the future */
   .orb.spinning { animation: gaze 1s ease; }
   @keyframes gaze {
     0%,100% { transform: translateX(-50%) translateY(0) rotate(0); }
@@ -175,7 +168,6 @@
     75% { transform: translateX(-50%) translateY(-2px) rotate(1.5deg); }
   }
 
-  /* the waving hand that appears near the ball */
   .hand {
     position: absolute;
     top: 38%;
@@ -201,7 +193,6 @@
     .orb { transition: none; }
   }
 
-  /* The reveal card */
   .card {
     background: var(--card-bg);
     border: none;
@@ -217,12 +208,12 @@
   .card.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
   .card .kind {
-    font-family: 'Mencken Std Text', 'Fraunces', Georgia, serif;
+    font-family: 'Spline Sans Mono', monospace;
     font-weight: 400;
-    font-size: 0.68rem;
-    letter-spacing: 0.28em;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--glow);
+    color: #761200;
     margin-bottom: 1.25rem;
   }
 
@@ -234,10 +225,10 @@
   }
 
   .card .intro {
-    font-size: 1.32rem;
+    font-size: 16px;
     line-height: 1.5;
     font-weight: 400;
-    color: var(--ink);
+    color: #282828;
     text-align: center;
     margin-bottom: 1.4rem;
   }
@@ -254,32 +245,35 @@
   /* Poem: left-aligned verse with poet's name in bold at the bottom */
   .card[data-type="poem"] .body {
     text-align: left;
+    line-height: 110%;
   }
   .card[data-type="poem"] .attribution {
     text-align: left;
     font-style: normal;
     color: var(--ink);
-    margin-top: 1.4rem;
+    margin-top: 1rem;
+    font-size: 18px;
+    line-height: 110%;
   }
   .card[data-type="poem"] .attribution strong {
     font-weight: 700;
   }
 
-  /* Quote: left-aligned text; author in the "Listen here" treatment
-     (mono, uppercase, letter-spaced) but italic, no underline,
-     dropped one line below the quote, left aligned */
+  /* Quote: left-aligned text; author in bold below the quote */
   .card[data-type="quote"] .body {
     text-align: left;
+    line-height: 110%;
   }
   .card[data-type="quote"] .attribution {
     text-align: left;
-    margin-top: 1.5em;
-    font-family: 'Spline Sans Mono', monospace;
-    font-size: 0.74rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    font-style: italic;
+    margin-top: 1rem;
+    font-style: normal;
     color: var(--ink);
+    font-size: 18px;
+    line-height: 110%;
+  }
+  .card[data-type="quote"] .attribution strong {
+    font-weight: 700;
   }
 
   .card a.listen {
@@ -356,11 +350,10 @@
 <script>
 /* ============================================================
    YOUR CONTENT — edit this list.
-   type: "song" | "quote" | "poem"
    - song:  { type:"song",  url:"https://open.spotify.com/track/..." }
    - quote: { type:"quote", body:"The quote text.", attribution:"Author" }
-   - poem:  { type:"poem",  body:"Line one\nLine two\nLine three", attribution:"Poet" }
-   Use \n inside body for line breaks (poems). Use \n\n for a blank line between stanzas.
+   - poem:  { type:"poem",  body:"Line one\nLine two", attribution:"Poet" }
+   Use \n for line breaks, \n\n for a blank line between stanzas.
    ============================================================ */
 const ENTRIES = [
   { type:"poem", title:"Why I Wake Early", body:"Hello, sun in my face.\nHello, you who make the morning\nand spread it over the fields\nand into the faces of the tulips\nand the nodding morning glories,\nand into the windows of, even, the\nmiserable and the crotchety-\nbest preacher that ever was,\nclear star, that just happens\nto be where you are in the universe\nto keep us from ever-darkness,\nto ease us with warm touching,\nto hold us in the great hands of light –\ngood morning, good morning, good morning.\nWatch now, how I start the day\nIn happiness, in kindness.", attribution:"Mary Oliver" },
@@ -393,10 +386,6 @@ const ENTRIES = [
   { type:"song", url:"https://open.spotify.com/track/7oqftogUN82Q7VNy2TmTJW" },
 ];
 
-/* ============================================================
-   No-repeat logic: shuffles the deck, deals one per calendar
-   day, and reshuffles only after every entry has been shown.
-   ============================================================ */
 const KEY = "dailyDraw.v1";
 
 function todayStamp() {
@@ -421,31 +410,17 @@ function saveState(s) {
   try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {}
 }
 
-/* Returns the entry index assigned to today, creating it once. */
 function entryForToday() {
   let s = loadState();
-
-  // Reset the deck if the content list size changed.
   if (s.size !== ENTRIES.length) s = {};
-
   if (s.date === todayStamp() && typeof s.todayIndex === "number") {
-    return s.todayIndex; // already drawn today
+    return s.todayIndex;
   }
-
-  // Need a fresh draw. Refill the deck if empty.
   if (!Array.isArray(s.deck) || s.deck.length === 0) {
     s.deck = shuffledIndexes(ENTRIES.length);
   }
-
   const todayIndex = s.deck.shift();
-
-  saveState({
-    size: ENTRIES.length,
-    date: todayStamp(),
-    todayIndex,
-    deck: s.deck
-  });
-
+  saveState({ size: ENTRIES.length, date: todayStamp(), todayIndex, deck: s.deck });
   return todayIndex;
 }
 
@@ -464,7 +439,6 @@ const replayBtn = document.getElementById("replay");
 
 let animating = false;
 
-/* Plays the swirl, then fills the card with today's entry. */
 function playReveal() {
   if (animating) return;
   animating = true;
@@ -472,7 +446,6 @@ function playReveal() {
   const idx = entryForToday();
   const entry = ENTRIES[idx];
 
-  // hide the card while the ball swirls again
   card.classList.remove("show");
   orb.classList.add("spinning");
   windowEl.style.opacity = "0";
@@ -482,7 +455,6 @@ function playReveal() {
     card.setAttribute("data-type", entry.type);
 
     if (entry.type === "song") {
-      // Song: intro line + "Listen here" link, no quote body/attribution
       introEl.textContent = "Today's gift is in the form of a song.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "0";
@@ -496,23 +468,21 @@ function playReveal() {
         listenEl.style.display = "none";
       }
     } else if (entry.type === "poem") {
-      // Poem: intro line, left-aligned verse, poet in bold at the bottom
       introEl.textContent = "Today's gift is in the form of a poem.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "1.4rem";
       bodyEl.style.display = "block";
       bodyEl.innerHTML = (entry.body || "").replace(/\n/g, "<br>");
-      attrEl.innerHTML = entry.attribution ? "<strong>" + entry.attribution + "</strong>" : "";
+      attrEl.innerHTML = entry.attribution ? "<strong>— " + entry.attribution + "</strong>" : "";
       attrEl.style.display = entry.attribution ? "block" : "none";
       listenEl.style.display = "none";
     } else {
-      // Quote (default): intro line, left-aligned body + author label
       introEl.textContent = "Today's gift is in the form of a quote.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "1.4rem";
       bodyEl.style.display = "block";
-      bodyEl.innerHTML = (entry.body || "").replace(/\n/g, "<br>");
-      attrEl.innerHTML = entry.attribution ? entry.attribution : "";
+      bodyEl.innerHTML = entry.body ? "\u201C" + entry.body.replace(/\n/g, "<br>") + "\u201D" : "";
+      attrEl.innerHTML = entry.attribution ? "<strong>— " + entry.attribution + "</strong>" : "";
       attrEl.style.display = entry.attribution ? "block" : "none";
       listenEl.style.display = "none";
     }
@@ -530,11 +500,7 @@ function playReveal() {
   }, 1000);
 }
 
-// Swirl when the cursor passes in front of the ball.
-// pointerenter fires once per entry, so it won't loop while the cursor rests.
 orb.addEventListener("pointerenter", playReveal);
-
-// Click and keyboard still force a replay anytime.
 orb.addEventListener("click", playReveal);
 orb.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playReveal(); }
