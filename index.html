@@ -38,6 +38,11 @@
     overflow-x: hidden;
   }
 
+  @media (max-width: 600px) {
+    body { padding-left: 1.9rem; padding-right: 1.9rem; }
+    .card { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+
   .frame {
     width: 100%;
     max-width: 600px;
@@ -47,7 +52,7 @@
   .eyebrow {
     font-family: 'Mencken Std Head Narrow', 'Fraunces', Georgia, serif;
     font-weight: 400;
-    font-size: 30px;
+    font-size: clamp(20px, 6.4vw, 30px);
     line-height: 100%;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -260,6 +265,23 @@
     font-weight: 700;
   }
 
+  /* Quote: left-aligned text; author in the "Listen here" treatment
+     (mono, uppercase, letter-spaced) but italic, no underline,
+     dropped one line below the quote, left aligned */
+  .card[data-type="quote"] .body {
+    text-align: left;
+  }
+  .card[data-type="quote"] .attribution {
+    text-align: left;
+    margin-top: 1.5em;
+    font-family: 'Spline Sans Mono', monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-style: italic;
+    color: var(--ink);
+  }
+
   .card a.listen {
     display: inline-block;
     margin-top: 1.6rem;
@@ -335,17 +357,40 @@
 /* ============================================================
    YOUR CONTENT — edit this list.
    type: "song" | "quote" | "poem"
-   - song:  { type:"song",  body:"Song title", attribution:"Artist", url:"https://open.spotify.com/track/..." }
+   - song:  { type:"song",  url:"https://open.spotify.com/track/..." }
    - quote: { type:"quote", body:"The quote text.", attribution:"Author" }
    - poem:  { type:"poem",  body:"Line one\nLine two\nLine three", attribution:"Poet" }
-   Use \n inside body for line breaks (poems).
+   Use \n inside body for line breaks (poems). Use \n\n for a blank line between stanzas.
    ============================================================ */
 const ENTRIES = [
-  { type:"song",  body:"Such Great Heights", attribution:"The Postal Service", url:"https://open.spotify.com/track/0Am6Bb3GW7Bxlk2VsdH9Td" },
-  { type:"quote", body:"The cure for anything is salt water — sweat, tears, or the sea.", attribution:"Isak Dinesen" },
-  { type:"poem",  body:"I have no name:\nI am but two days old.\nWhat shall I call thee?\n\u201CI happy am,\nJoy is my name.\u201D\nSweet joy befall thee!\n\nPretty joy!\nSweet joy but two days old,\nSweet joy I call thee:\nThou dost smile,\nI sing the while,\nSweet joy befall thee!", attribution:"William Blake" },
-  { type:"song",  body:"Dreams", attribution:"Fleetwood Mac", url:"https://open.spotify.com/track/0ofHAoxe9vBkTCp2UQIavz" },
-  { type:"quote", body:"We are all in the gutter, but some of us are looking at the stars.", attribution:"Oscar Wilde" },
+  { type:"poem", title:"Why I Wake Early", body:"Hello, sun in my face.\nHello, you who make the morning\nand spread it over the fields\nand into the faces of the tulips\nand the nodding morning glories,\nand into the windows of, even, the\nmiserable and the crotchety-\nbest preacher that ever was,\nclear star, that just happens\nto be where you are in the universe\nto keep us from ever-darkness,\nto ease us with warm touching,\nto hold us in the great hands of light –\ngood morning, good morning, good morning.\nWatch now, how I start the day\nIn happiness, in kindness.", attribution:"Mary Oliver" },
+  { type:"poem", title:"A Center", body:"You must hold your quiet center,\nwhere you do what only you can do.\nIf others call you a maniac or a fool,\njust let them wag their tongues.\nIf some praise your perseverance,\ndon't feel too happy about it—\nonly solitude is a lasting friend.\n\nYou must hold your distant center.\nDon't move even if earth and heaven quake.\nIf others think you are insignificant,\nthat's because you haven't held on long enough.\nAs long as you stay put year after year,\neventually you will find a world\nbeginning to revolve around you.", attribution:"Ha Jin" },
+  { type:"poem", title:"The Uses of Sorrow", body:"Someone I loved once gave me\na box full of darkness.\n\nIt took me years to understand\nthat this, too, was a gift.", attribution:"Mary Oliver" },
+  { type:"poem", title:"Remember", body:"Remember the sky that you were born under,\nknow each of the star's stories.\nRemember the moon, know who she is.\nRemember the sun's birth at dawn, that is the\nstrongest point of time. Remember sundown\nand the giving away to night.\nRemember your birth, how your mother struggled\nto give you form and breath. You are evidence of\nher life, and her mother's, and hers.\nRemember your father. He is your life, also.\nRemember the earth whose skin you are:\nred earth, black earth, yellow earth, white earth\nbrown earth, we are earth.\nRemember the plants, trees, animal life who all have their\ntribes, their families, their histories, too. Talk to them,\nlisten to them. They are alive poems.\nRemember the wind. Remember her voice. She knows the\norigin of this universe.\nRemember you are all people and all people\nare you.\nRemember you are this universe and this\nuniverse is you.\nRemember all is in motion, is growing, is you.\nRemember language comes from this.\nRemember the dance language is, that life is.\nRemember.", attribution:"Joy Harjo" },
+  { type:"poem", title:"Red Brocade", body:"The Arabs used to say,\nWhen a stranger appears at your door,\nfeed him for three days\nbefore asking who he is,\nwhere he's come from,\nwhere he's headed.\nThat way, he'll have strength\nenough to answer.\nOr, by then you'll be\nsuch good friends\nyou don't care.\n\nLet's go back to that.\nRice? Pine nuts?\nHere, take the red brocade pillow.\nMy child will serve water\nto your horse.\n\nNo, I was not busy when you came!\nI was not preparing to be busy.\nThat's the armor everyone put on\nto pretend they had a purpose\nin the world.\n\nI refuse to be claimed.\nYour plate is waiting.\nWe will snip fresh mint\ninto your tea.", attribution:"Naomi Shihab Nye" },
+  { type:"poem", title:"Starlings in Winter", body:"Chunky and noisy,\nbut with stars in their black feathers,\nthey spring from the telephone wire\nand instantly\nthey are acrobats\nin the freezing wind.\nAnd now, in the theater of air,\nthey swing over buildings,\ndipping and rising;\nthey float like one stippled star\nthat opens,\nbecomes for a moment fragmented,\nthen closes again;\nand you watch\nand you try\nbut you simply can't imagine\nhow they do it\nwith no articulated instruction, no pause,\nonly the silent confirmation\nthat they are this notable thing,\nthis wheel of many parts, that can rise and spin\nover and over again,\nfull of gorgeous life.\nAh, world, what lessons you prepare for us,\neven in the leafless winter,\neven in the ashy city.\nI am thinking now\nof grief, and of getting past it;\nI feel my boots\ntrying to leave the ground,\nI feel my heart\npumping hard. I want\nto think again of dangerous and noble things.\nI want to be light and frolicsome.\nI want to be improbable beautiful and afraid of nothing,\nas though I had wings.", attribution:"Mary Oliver" },
+  { type:"quote", body:"The very least you can do in your life is figure out what you hope for. And the most you can do is live inside that hope. Not admire it from a distance but live right in it, under its roof.", attribution:"Barbara Kingsolver" },
+  { type:"quote", body:"Keep a little fire burning; however small, however hidden.", attribution:"Cormac McCarthy" },
+  { type:"quote", body:"There is a crack in everything. That's how the light gets in.", attribution:"Leonard Cohen" },
+  { type:"quote", body:"All kids need is a little help, a little hope, and somebody who believes in them.", attribution:"Magic Johnson" },
+  { type:"song", url:"https://open.spotify.com/track/4UxJfZyHENxiSp60UzTGLW" },
+  { type:"song", url:"https://open.spotify.com/track/29MnyydjwSuj8ZodH7tK7r" },
+  { type:"song", url:"https://open.spotify.com/track/7vMxPKp4xh7Ii6lQqL6BOS" },
+  { type:"song", url:"https://open.spotify.com/track/5CtlTs95X94cWRqbY1nLuM" },
+  { type:"song", url:"https://open.spotify.com/track/0Psz3az3RIYfJpnsajBT8N" },
+  { type:"song", url:"https://open.spotify.com/track/72tmtay9VtSn8BAynFWWyC" },
+  { type:"song", url:"https://open.spotify.com/track/66RsC3VzFhBPwMtjVXvle0" },
+  { type:"song", url:"https://open.spotify.com/track/45c2puZgmaC23MaKgeHda2" },
+  { type:"song", url:"https://open.spotify.com/track/08HR9PoLSeovgXWvJEZrvi" },
+  { type:"song", url:"https://open.spotify.com/track/3I6cO7rHpDUKOrsjzOHwhi" },
+  { type:"song", url:"https://open.spotify.com/track/5PRdzrncmga9ieUFVrlE41" },
+  { type:"song", url:"https://open.spotify.com/track/2GLN3KJjmFhXG8mHGr6II0" },
+  { type:"song", url:"https://open.spotify.com/track/7x6hO9VMAee9x1iWaeNkL6" },
+  { type:"song", url:"https://open.spotify.com/track/1c9ZZvFtpbpnWZPLX3ebh3" },
+  { type:"song", url:"https://open.spotify.com/track/6jeIbpsYPF0CTId7QrLLer" },
+  { type:"song", url:"https://open.spotify.com/track/6aR20F8CYHrvBPjMtwS2gL" },
+  { type:"song", url:"https://open.spotify.com/track/2GOQVqZ3uVp7LKVAY1T0mk" },
+  { type:"song", url:"https://open.spotify.com/track/7oqftogUN82Q7VNy2TmTJW" },
 ];
 
 /* ============================================================
@@ -461,13 +506,13 @@ function playReveal() {
       attrEl.style.display = entry.attribution ? "block" : "none";
       listenEl.style.display = "none";
     } else {
-      // Quote (default): intro line, centered body + italic em-dash attribution
+      // Quote (default): intro line, left-aligned body + author label
       introEl.textContent = "Today's gift is in the form of a quote.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "1.4rem";
       bodyEl.style.display = "block";
       bodyEl.innerHTML = (entry.body || "").replace(/\n/g, "<br>");
-      attrEl.innerHTML = entry.attribution ? "— " + entry.attribution : "";
+      attrEl.innerHTML = entry.attribution ? entry.attribution : "";
       attrEl.style.display = entry.attribution ? "block" : "none";
       listenEl.style.display = "none";
     }
@@ -498,4 +543,3 @@ replayBtn.addEventListener("click", playReveal);
 </script>
 </body>
 </html>
-
