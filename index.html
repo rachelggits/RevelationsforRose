@@ -242,7 +242,15 @@
     font-style: italic;
   }
 
-  /* Poem: left-aligned verse with poet's name in bold at the bottom */
+  /* Poem: title in bold on top, left-aligned verse, poet bold at bottom */
+  .card .poem-title {
+    text-align: left;
+    font-weight: 700;
+    font-size: 1.32rem;
+    line-height: 110%;
+    color: var(--ink);
+    margin-bottom: 0.9rem;
+  }
   .card[data-type="poem"] .body {
     text-align: left;
     line-height: 110%;
@@ -338,6 +346,7 @@
     <section class="card" id="card" aria-live="polite">
       <p class="kind" id="kind"></p>
       <p class="intro" id="intro"></p>
+      <p class="poem-title" id="poemTitle"></p>
       <p class="body" id="cardBody"></p>
       <p class="attribution" id="attribution"></p>
       <a class="listen" id="listen" href="#" target="_blank" rel="noopener">Listen here ↗</a>
@@ -352,11 +361,12 @@
    YOUR CONTENT — edit this list.
    - song:  { type:"song",  url:"https://open.spotify.com/track/..." }
    - quote: { type:"quote", body:"The quote text.", attribution:"Author" }
-   - poem:  { type:"poem",  body:"Line one\nLine two", attribution:"Poet" }
+   - poem:  { type:"poem",  title:"Poem Title", body:"Line one\nLine two", attribution:"Poet" }
    Use \n for line breaks, \n\n for a blank line between stanzas.
    ============================================================ */
 const ENTRIES = [
   { type:"poem", title:"Why I Wake Early", body:"Hello, sun in my face.\nHello, you who make the morning\nand spread it over the fields\nand into the faces of the tulips\nand the nodding morning glories,\nand into the windows of, even, the\nmiserable and the crotchety-\nbest preacher that ever was,\nclear star, that just happens\nto be where you are in the universe\nto keep us from ever-darkness,\nto ease us with warm touching,\nto hold us in the great hands of light –\ngood morning, good morning, good morning.\nWatch now, how I start the day\nIn happiness, in kindness.", attribution:"Mary Oliver" },
+  { type:"poem", title:"Still I Rise", body:"You may write me down in history\nWith your bitter, twisted lies,\nYou may trod me in the very dirt\nBut still, like dust, I'll rise.\n\nDoes my sassiness upset you?\nWhy are you beset with gloom?\n'Cause I walk like I've got oil wells\nPumping in my living room.\n\nJust like moons and like suns,\nWith the certainty of tides,\nJust like hopes springing high,\nStill I'll rise.\n\nDid you want to see me broken?\nBowed head and lowered eyes?\nShoulders falling down like teardrops,\nWeakened by my soulful cries?\n\nDoes my haughtiness offend you?\nDon't you take it awful hard\n'Cause I laugh like I've got gold mines\nDiggin' in my own backyard.\n\nYou may shoot me with your words,\nYou may cut me with your eyes,\nYou may kill me with your hatefulness,\nBut still, like air, I'll rise.\n\nDoes my sexiness upset you?\nDoes it come as a surprise\nThat I dance like I've got diamonds\nAt the meeting of my thighs?\n\nOut of the huts of history's shame\nI rise\nUp from a past that's rooted in pain\nI rise\nI'm a black ocean,\nleaping and wide,\nWelling and swelling I bear in the tide.\n\nLeaving behind nights of terror and fear\nI rise\nInto a daybreak that's wondrously clear\nI rise\nBringing the gifts that my ancestors gave,\nI am the dream and the hope of the slave.\nI rise\nI rise\nI rise.", attribution:"Maya Angelou" },
   { type:"poem", title:"A Center", body:"You must hold your quiet center,\nwhere you do what only you can do.\nIf others call you a maniac or a fool,\njust let them wag their tongues.\nIf some praise your perseverance,\ndon't feel too happy about it—\nonly solitude is a lasting friend.\n\nYou must hold your distant center.\nDon't move even if earth and heaven quake.\nIf others think you are insignificant,\nthat's because you haven't held on long enough.\nAs long as you stay put year after year,\neventually you will find a world\nbeginning to revolve around you.", attribution:"Ha Jin" },
   { type:"poem", title:"The Uses of Sorrow", body:"Someone I loved once gave me\na box full of darkness.\n\nIt took me years to understand\nthat this, too, was a gift.", attribution:"Mary Oliver" },
   { type:"poem", title:"Remember", body:"Remember the sky that you were born under,\nknow each of the star's stories.\nRemember the moon, know who she is.\nRemember the sun's birth at dawn, that is the\nstrongest point of time. Remember sundown\nand the giving away to night.\nRemember your birth, how your mother struggled\nto give you form and breath. You are evidence of\nher life, and her mother's, and hers.\nRemember your father. He is your life, also.\nRemember the earth whose skin you are:\nred earth, black earth, yellow earth, white earth\nbrown earth, we are earth.\nRemember the plants, trees, animal life who all have their\ntribes, their families, their histories, too. Talk to them,\nlisten to them. They are alive poems.\nRemember the wind. Remember her voice. She knows the\norigin of this universe.\nRemember you are all people and all people\nare you.\nRemember you are this universe and this\nuniverse is you.\nRemember all is in motion, is growing, is you.\nRemember language comes from this.\nRemember the dance language is, that life is.\nRemember.", attribution:"Joy Harjo" },
@@ -365,6 +375,11 @@ const ENTRIES = [
   { type:"quote", body:"The very least you can do in your life is figure out what you hope for. And the most you can do is live inside that hope. Not admire it from a distance but live right in it, under its roof.", attribution:"Barbara Kingsolver" },
   { type:"quote", body:"Keep a little fire burning; however small, however hidden.", attribution:"Cormac McCarthy" },
   { type:"quote", body:"There is a crack in everything. That's how the light gets in.", attribution:"Leonard Cohen" },
+  { type:"quote", body:"The love expressed between women is particular and powerful because we have had to love in order to live; love has been our survival", attribution:"Audre Lorde" },
+  { type:"quote", body:"Just be whatever you are. Be it fully and constantly. As I see you, you are pure gold. Better, you are some elixir mixed with clay. You don't need to worry about “getting there.” You are now, already, forever.", attribution:"Henry Miller" },
+  { type:"quote", body:"I am grateful to be a woman. I must have done something great in another life.", attribution:"Maya Angelou" },
+  { type:"quote", body:"I hope you will go out and let stories, that is life, happen to you, and that you will work with these stories…water them with your blood and tears and your laughter until they bloom, till you yourself burst into bloom.", attribution:"Clarissa Pinkola Estés" },
+  { type:"quote", body:"Others inspire us, information feeds us, practice improves our performance, but we need quiet time to figure things out, to emerge with new discoveries, to unearth original answers.", attribution:"Ester Buchholz" },
   { type:"song", url:"https://open.spotify.com/track/4UxJfZyHENxiSp60UzTGLW" },
   { type:"song", url:"https://open.spotify.com/track/29MnyydjwSuj8ZodH7tK7r" },
   { type:"song", url:"https://open.spotify.com/track/7vMxPKp4xh7Ii6lQqL6BOS" },
@@ -383,6 +398,14 @@ const ENTRIES = [
   { type:"song", url:"https://open.spotify.com/track/6aR20F8CYHrvBPjMtwS2gL" },
   { type:"song", url:"https://open.spotify.com/track/2GOQVqZ3uVp7LKVAY1T0mk" },
   { type:"song", url:"https://open.spotify.com/track/7oqftogUN82Q7VNy2TmTJW" },
+  { type:"song", url:"https://open.spotify.com/track/3lbYuHMYVbnvksSDw1jx7X" },
+  { type:"song", url:"https://open.spotify.com/track/7Fj3WLawd3Nms8utkoC3sb" },
+  { type:"song", url:"https://open.spotify.com/track/0q21FNwES2bbtcduB6kjEU" },
+  { type:"song", url:"https://open.spotify.com/track/40cayr7aVuRU8lXVn1PSpx" },
+  { type:"song", url:"https://open.spotify.com/track/6p98C2A7YoSCOO5iKEuK2A" },
+  { type:"song", url:"https://open.spotify.com/track/4fMXQkXkfmO6KWKVwxvkWT" },
+  { type:"song", url:"https://open.spotify.com/track/0vovnhziMYImdMsEDPncA8" },
+  { type:"song", url:"https://open.spotify.com/track/18si7eMHILDh0mVOSHQGMF" },
 ];
 
 const KEY = "dailyDraw.v1";
@@ -430,6 +453,7 @@ const windowEl = document.getElementById("window");
 const card = document.getElementById("card");
 const kindEl = document.getElementById("kind");
 const introEl = document.getElementById("intro");
+const poemTitleEl = document.getElementById("poemTitle");
 const bodyEl = document.getElementById("cardBody");
 const attrEl = document.getElementById("attribution");
 const listenEl = document.getElementById("listen");
@@ -457,6 +481,7 @@ function playReveal() {
       introEl.textContent = "Today's gift is in the form of a song.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "0";
+      poemTitleEl.style.display = "none";
       bodyEl.innerHTML = "";
       bodyEl.style.display = "none";
       attrEl.style.display = "none";
@@ -470,6 +495,8 @@ function playReveal() {
       introEl.textContent = "Today's gift is in the form of a poem.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "1.4rem";
+      poemTitleEl.textContent = entry.title || "";
+      poemTitleEl.style.display = entry.title ? "block" : "none";
       bodyEl.style.display = "block";
       bodyEl.innerHTML = (entry.body || "").replace(/\n/g, "<br>");
       attrEl.innerHTML = entry.attribution ? "<strong>— " + entry.attribution + "</strong>" : "";
@@ -479,6 +506,7 @@ function playReveal() {
       introEl.textContent = "Today's gift is in the form of a quote.";
       introEl.style.display = "block";
       introEl.style.marginBottom = "1.4rem";
+      poemTitleEl.style.display = "none";
       bodyEl.style.display = "block";
       bodyEl.innerHTML = entry.body ? "\u201C" + entry.body.replace(/\n/g, "<br>") + "\u201D" : "";
       attrEl.innerHTML = entry.attribution ? "<strong>— " + entry.attribution + "</strong>" : "";
